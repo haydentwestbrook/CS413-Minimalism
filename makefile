@@ -12,10 +12,10 @@ $(APP).swf:$(SOURCES)
 	-cp src \
 	-cp vendor \
 	-swf-version 11.8 \
-	swf-header 1280:720:60:ffffff \
+	-swf-header 1280:720:60:ffffff \
 	-main Startup \
 	-swf $(APP).swf \
-	-swf.lib vendor/starling-11.8.swc --macro "patchTypes('vendor/starling.patch')"
+	-swf-lib vendor/starling-11.8.swc --macro "patchTypes('vendor/starling.patch')"
 
 clean:
 	del $(APP).swf

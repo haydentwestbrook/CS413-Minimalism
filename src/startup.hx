@@ -38,7 +38,10 @@ class Startup extends Sprite {
 		mStarling.antiAliasing = 0;
 		function onRootCreated(event:Dynamic, root:Root) {
 			mStarling.removeEventListener(starling.events.Event.ROOT_CREATED, onRootCreated);
+			root.start(this);
+        	mStarling.start();
 		}
+		mStarling.addEventListener(starling.events.Event.ROOT_CREATED, onRootCreated);
 	}
 
 	static function main() {
