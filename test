@@ -1,0 +1,11 @@
+
+haxe \
+	-cp src \
+	-cp vendor \
+	-swf-version 11.8 \
+	-swf-header 1280:720:60:ffffff \
+	-main Startup \
+	-swf Game.swf \
+	-swf-lib vendor/starling-11.8.swc --macro "patchTypes('vendor/starling.patch')"
+
+/c/Flex/bin/adl -profile tv -screensize 1280x720:1280x720 Game.xml
