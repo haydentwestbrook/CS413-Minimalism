@@ -3,6 +3,10 @@ import starling.utils.AssetManager;
 import starling.display.Image;
 import starling.core.Starling;
 import starling.animation.Transitions;
+import starling.events.KeyboardEvent;
+import starling.events.TouchEvent;
+import starling.events.Touch;
+import starling.events.TouchPhase;
 import Std;
 
 class Root extends Sprite {
@@ -10,6 +14,8 @@ class Root extends Sprite {
 	public static var assets:AssetManager;
 	public var square1:Image;
 	public var square2:Image;
+	public var rand1:Int;
+	public var rand2:Int;
 
 	public function new() {
 		super();
@@ -42,9 +48,13 @@ class Root extends Sprite {
 
     public function run() {
 
-    	var number1 = makeSquare(square1, 100, 100);
-    	var number2 = makeSquare(square2, 100, 500);
-    }
+    	rand1 = makeSquare(square1, 100, 100);
+    	rand2 = makeSquare(square2, 100, 500);
+
+    	Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyPress);
+    	Starling.current.stage.addEventListener(TouchEvent.TOUCH, touchPress);
+
+    };
 
     public function makeSquare(square:Image, x:Int, y:Int) {
     	var rand = Std.random(3);
@@ -62,6 +72,21 @@ class Root extends Sprite {
 
     	return rand;
     }
+
+    public function touchPress(e:TouchEvent) {
+    	var t:Touch = e.getTouch(this);
+    	if(t != null) {
+			switch(t.phase) {
+				case TouchPhase.ENDED:
+					//log("Touch Ended");
+	 				makeSquare(square1, 100, 100);
+			} 
+		}
+	}
+
+	public function keyPress(e:KeyboardEvent) {
+	 	makeSquare(square1, 100, 100);
+	}
 
 
 }
