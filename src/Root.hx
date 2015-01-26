@@ -23,6 +23,8 @@ class Root extends Sprite {
 
 	public function start(startup:Startup) {
 
+        //Removes loading screen and begins run()
+
         assets = new AssetManager();
         assets.enqueue("assets/redSquare.png");
         assets.enqueue("assets/blueSquare.png");
@@ -47,16 +49,20 @@ class Root extends Sprite {
     }
 
     public function run() {
+        //Responsible for main game loop
 
+        //Set up squares
     	rand1 = makeSquare(square1, 100, 100);
     	rand2 = makeSquare(square2, 100, 500);
 
+        //User input listeners
     	Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyPress);
     	Starling.current.stage.addEventListener(TouchEvent.TOUCH, touchPress);
 
     };
 
     public function makeSquare(square:Image, x:Int, y:Int) {
+        //Randomly sets the color for one square
     	var rand = Std.random(3);
 
     	if(rand == 0) {
@@ -78,7 +84,6 @@ class Root extends Sprite {
     	if(t != null) {
 			switch(t.phase) {
 				case TouchPhase.ENDED:
-					//log("Touch Ended");
 	 				makeSquare(square1, 100, 100);
 			} 
 		}
