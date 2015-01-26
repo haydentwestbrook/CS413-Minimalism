@@ -16,6 +16,7 @@ class Root extends Sprite {
 	public var square2:Image;
 	public var rand1:Int;
 	public var rand2:Int;
+    public var speed = 3;
 
 	public function new() {
 		super();
@@ -39,7 +40,7 @@ class Root extends Sprite {
                         alpha: 0,
                         onComplete: function() {
                         startup.removeChild(startup.loadingBitmap);
-                        run();
+                        run(speed);
                			}
 
                 });
@@ -48,12 +49,15 @@ class Root extends Sprite {
         });
     }
 
-    public function run() {
+    public function run(speed:Int) {
         //Responsible for main game loop
 
         //Set up squares
-    	rand1 = makeSquare(square1, 100, 100);
-    	rand2 = makeSquare(square2, 100, 500);
+    	makeSquare1();
+    	makeSquare2();
+
+
+        Starling.juggler.delayCall(makeSquare1, speed);
 
         //User input listeners
     	Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyPress);
@@ -61,22 +65,36 @@ class Root extends Sprite {
 
     };
 
-    public function makeSquare(square:Image, x:Int, y:Int) {
-        //Randomly sets the color for one square
-    	var rand = Std.random(3);
+    public function makeSquare1() {
+        //Randomly sets the color for square1
+    	rand1 = Std.random(3);
 
-    	if(rand == 0) {
-    		square = new Image(Root.assets.getTexture("redSquare"));
-    	} else if(rand == 1) {
-    		square = new Image(Root.assets.getTexture("blueSquare"));
-    	} else if(rand == 2) {
-    		square = new Image(Root.assets.getTexture("greenSquare"));
+    	if(rand1 == 0) {
+    		square1 = new Image(Root.assets.getTexture("redSquare"));
+    	} else if(rand1 == 1) {
+    		square1 = new Image(Root.assets.getTexture("blueSquare"));
+    	} else if(rand1 == 2) {
+    		square1 = new Image(Root.assets.getTexture("greenSquare"));
     	}
-    	square.x = x;
-    	square.y = y;
-    	addChild(square);
+    	square1.x = 100;
+    	square1.y = 100;
+    	addChild(square1);
+    }
 
-    	return rand;
+    public function makeSquare2() {
+        //Randomly sets the color for square1
+        rand2 = Std.random(3);
+
+        if(rand2 == 0) {
+            square2 = new Image(Root.assets.getTexture("redSquare"));
+        } else if(rand2 == 1) {
+            square2 = new Image(Root.assets.getTexture("blueSquare"));
+        } else if(rand2 == 2) {
+            square2 = new Image(Root.assets.getTexture("greenSquare"));
+        }
+        square2.x = 100;
+        square2.y = 500;
+        addChild(square2);
     }
 
     public function touchPress(e:TouchEvent) {
@@ -84,14 +102,26 @@ class Root extends Sprite {
     	if(t != null) {
 			switch(t.phase) {
 				case TouchPhase.ENDED:
-	 				makeSquare(square1, 100, 100);
+	 				checkWin();
 			} 
 		}
 	}
 
 	public function keyPress(e:KeyboardEvent) {
-	 	makeSquare(square1, 100, 100);
+	 	checkWin();
 	}
+
+    public function checkWin() {
+        trace(rand1);
+        trace(rand2);
+        if(rand1 == rand2) {
+            //Won the game
+            run(speed--);
+        } else {
+            //Game over
+
+        }
+    }
 
 
 }
