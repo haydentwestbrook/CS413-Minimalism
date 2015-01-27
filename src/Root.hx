@@ -9,14 +9,18 @@ import starling.events.Touch;
 import starling.events.TouchPhase;
 import Std;
 
+
 class Root extends Sprite {
+
+
 
 	public static var assets:AssetManager;
 	public var square1:Image;
 	public var square2:Image;
 	public var rand1:Int;
 	public var rand2:Int;
-    public var speed = 3;
+    public var speed = 5;
+    
 
 	public function new() {
 		super();
@@ -48,20 +52,28 @@ class Root extends Sprite {
 
         });
     }
-
+    
+ 
     public function run(speed:Int) {
+        
+      
         //Responsible for main game loop
+        
+        
 
         //Set up squares
     	makeSquare1();
     	makeSquare2();
 
 
-        Starling.juggler.delayCall(makeSquare1, speed);
+        Starling.juggler.repeatCall(makeSquare1, speed, 0);
 
         //User input listeners
+
     	Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyPress);
     	Starling.current.stage.addEventListener(TouchEvent.TOUCH, touchPress);
+
+        
 
     };
 
