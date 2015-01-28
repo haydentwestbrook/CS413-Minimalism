@@ -63,7 +63,7 @@ class Root extends Sprite {
         // creates score text field
         scoreText = new TextField(500, 500, "Score: ", "Arial", 24, 0xff0000);
         this.addChild(scoreText);
-        scoreText.text = "Score " + points;
+        scoreText.text += points;
     }
     
     public function updateScore(){
