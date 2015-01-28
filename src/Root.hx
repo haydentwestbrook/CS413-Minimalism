@@ -8,6 +8,7 @@ import starling.events.TouchEvent;
 import starling.events.Touch;
 import starling.events.TouchPhase;
 import starling.text.TextField;
+import starling.animation.IAnimatable;
 import Std;
 import flash.events.Event;
 
@@ -20,11 +21,12 @@ class Root extends Sprite {
 	public static var assets:AssetManager;
 	public var square1:Image;
 	public var square2:Image;
-	public var rand1:Int;
-	public var rand2:Int;
-    public var speed:Int = 4;
+	public var rand1:Int = -1;
+	public var rand2:Int = -1;
+    public var speed:Float = 2.0;
     public var points:Int = 0;
     public var scoreText:TextField;
+    public var repeat:IAnimatable;
     
     
 
@@ -40,6 +42,9 @@ class Root extends Sprite {
         assets.enqueue("assets/redSquare.png");
         assets.enqueue("assets/blueSquare.png");
         assets.enqueue("assets/greenSquare.png");
+        assets.enqueue("assets/yellowSquare.png");
+        assets.enqueue("assets/orangeSquare.png");
+        assets.enqueue("assets/purpleSquare.png");
         assets.loadQueue(function onProgress(ratio:Float) {
 
             if (ratio == 1) {
@@ -94,14 +99,16 @@ class Root extends Sprite {
     	makeSquare1();
     	makeSquare2();
         
-        Starling.juggler.repeatCall(makeSquare1, speed, 0);
-
-
+        repeat = Starling.juggler.repeatCall(makeSquare1, speed, 0);
     };
 
     public function makeSquare1() {
         //Randomly sets the color for square1
-    	rand1 = Std.random(3);
+        var oldRand = rand1;
+    	rand1 = Std.random(6);
+        while(oldRand == rand1) {
+            rand1 = Std.random(6);
+        }
 
     	if(rand1 == 0) {
     		square1 = new Image(Root.assets.getTexture("redSquare"));
@@ -109,7 +116,13 @@ class Root extends Sprite {
     		square1 = new Image(Root.assets.getTexture("blueSquare"));
     	} else if(rand1 == 2) {
     		square1 = new Image(Root.assets.getTexture("greenSquare"));
-    	}
+    	}  else if(rand1 == 3) {
+            square1 = new Image(Root.assets.getTexture("yellowSquare"));
+        }  else if(rand1 == 4) {
+            square1 = new Image(Root.assets.getTexture("orangeSquare"));
+        }  else if(rand1 == 5) {
+            square1 = new Image(Root.assets.getTexture("purpleSquare"));
+        }
     	square1.x = 500;
     	square1.y = 100;
     	addChild(square1);
@@ -117,7 +130,11 @@ class Root extends Sprite {
 
     public function makeSquare2() {
         //Randomly sets the color for square1
-        rand2 = Std.random(3);
+        var oldRand = rand2;
+        rand2 = Std.random(6);
+        while(oldRand == rand2) {
+            rand2 = Std.random(6);
+        }
 
         if(rand2 == 0) {
             square2 = new Image(Root.assets.getTexture("redSquare"));
@@ -125,6 +142,12 @@ class Root extends Sprite {
             square2 = new Image(Root.assets.getTexture("blueSquare"));
         } else if(rand2 == 2) {
             square2 = new Image(Root.assets.getTexture("greenSquare"));
+        }  else if(rand2 == 3) {
+            square2 = new Image(Root.assets.getTexture("yellowSquare"));
+        }  else if(rand2 == 4) {
+            square2 = new Image(Root.assets.getTexture("orangeSquare"));
+        }  else if(rand2 == 5) {
+            square2 = new Image(Root.assets.getTexture("purpleSquare"));
         }
         square2.x = 500;
         square2.y = 500;
@@ -165,7 +188,8 @@ class Root extends Sprite {
             else{
                 // match made and speed above 1, so runs loop again but with faster speed
                 trace("speed changed to" + (speed-1));
-                run(speed--);  
+                Starling.juggler.remove(repeat);
+                run(speed = speed * .75);  
             }   
         }
         else{
