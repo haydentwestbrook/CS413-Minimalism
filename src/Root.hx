@@ -159,12 +159,12 @@ class Root extends Sprite {
             points++;
             if(speed == 1){
                 // player at lowest speed already, if speed of 0 or -1 is reached, it will crash, so go to next level?
-                trace("speed at "+speed);
+                trace("speed at " + speed);
                 nextLevel();
             }
             else{
                 // match made and speed above 1, so runs loop again but with faster speed
-                trace("speed changed to" + (speed-1));
+                trace("speed changed to " + (speed - 1));
                 run(speed--);  
             }   
         }
