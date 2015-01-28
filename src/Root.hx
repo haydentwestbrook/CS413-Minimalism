@@ -24,6 +24,7 @@ class Root extends Sprite {
 	public var rand1:Int = -1;
 	public var rand2:Int = -1;
     public var speed:Float = 2.0;
+    public var maxRand = 6;
     public var points:Int = 0;
     public var scoreText:TextField;
     public var repeat:IAnimatable;
@@ -79,6 +80,7 @@ class Root extends Sprite {
 
     public function nextLevel(){
         trace("next level reached.");
+        speed = 2.0;
     }
     
     public function listenerInit(){
@@ -86,9 +88,9 @@ class Root extends Sprite {
         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyPress);
         Starling.current.stage.addEventListener(TouchEvent.TOUCH, touchPress);
 
-        run(speed);
+        run(speed, maxRand);
     }
-    public function run(speed) {
+    public function run(speed, maxRand) {
         // updates then displays users current score
         updateScore();
         displayScore();
@@ -96,18 +98,18 @@ class Root extends Sprite {
 
         //Set up squares
         
-    	makeSquare1();
-    	makeSquare2();
+    	makeSquare1(maxRand);
+    	makeSquare2(maxRand);
         
-        repeat = Starling.juggler.repeatCall(makeSquare1, speed, 0);
+        repeat = Starling.juggler.repeatCall(makeSquare1, speed, 0, maxRand);
     };
 
-    public function makeSquare1() {
+    public function makeSquare1(maxRand:Int) {
         //Randomly sets the color for square1
         var oldRand = rand1;
-    	rand1 = Std.random(6);
+    	rand1 = Std.random(maxRand);
         while(oldRand == rand1) {
-            rand1 = Std.random(6);
+            rand1 = Std.random(maxRand);
         }
 
     	if(rand1 == 0) {
@@ -128,12 +130,12 @@ class Root extends Sprite {
     	addChild(square1);
     }
 
-    public function makeSquare2() {
+    public function makeSquare2(maxRand:Int) {
         //Randomly sets the color for square1
         var oldRand = rand2;
-        rand2 = Std.random(6);
+        rand2 = Std.random(maxRand);
         while(oldRand == rand2) {
-            rand2 = Std.random(6);
+            rand2 = Std.random(maxRand);
         }
 
         if(rand2 == 0) {
@@ -168,11 +170,6 @@ class Root extends Sprite {
 	 	checkWin();
 	}
 
-
-   
-    
-
-
     public function checkWin() {
         trace(rand1);
         trace(rand2);
@@ -180,16 +177,15 @@ class Root extends Sprite {
 
             trace("match");
             points++;
-            if(speed == 1){
+            if(speed <= .25){
                 // player at lowest speed already, if speed of 0 or -1 is reached, it will crash, so go to next level?
-                trace("speed at "+speed);
                 nextLevel();
             }
             else{
                 // match made and speed above 1, so runs loop again but with faster speed
-                trace("speed changed to" + (speed-1));
                 Starling.juggler.remove(repeat);
-                run(speed = speed * .75);  
+                speed = speed * .75;
+                run(speed, maxRand);  
             }   
         }
         else{
