@@ -35,7 +35,8 @@ class Root extends Sprite {
     public var background:Image;
     public var level:Int = 1;
     public var bgmusic:SoundChannel; 
-    
+    public var beep:SoundChannel;
+
 
     
     
@@ -51,6 +52,7 @@ class Root extends Sprite {
         assets = new AssetManager();
 
         assets.enqueue("assets/bgmusic.mp3");
+        assets.enqueue("assets/beep.mp3");
 
         assets.enqueue("assets/background1.png");
         assets.enqueue("assets/background2.png");
@@ -221,15 +223,17 @@ class Root extends Sprite {
 
     public function checkWin() {
         if(rand1 == rand2){
-
+            assets.playSound("beep");
             points++;
             if(speed <= fastestSpeed){
                 // player at lowest speed already, if speed of 0 or -1 is reached, it will crash, so go to next level?
+
                 Starling.juggler.remove(repeat);
                 nextLevel();
             }
             else{
                 // match made and speed above 1, so runs loop again but with faster speed
+                
                 Starling.juggler.remove(repeat);
                 speed = speed * .75;
                 run(speed, maxRand);
