@@ -29,8 +29,10 @@ class Root extends Sprite {
     public var fastestSpeed:Float = .4;
     public var maxRand = 3;
     public var points:Int = 0;
+    public var misses:Int = 0;
     public var scoreText:TextField;
     public var levelText:TextField;
+    public var missText:TextField;
     public var repeat:IAnimatable;
     public var background:Image;
     public var level:Int = 1;
@@ -53,6 +55,7 @@ class Root extends Sprite {
 
         assets.enqueue("assets/bgmusic.mp3");
         assets.enqueue("assets/beep.mp3");
+        assets.enqueue("assets/wrong.mp3");
 
         assets.enqueue("assets/background1.png");
         assets.enqueue("assets/background2.png");
@@ -106,7 +109,7 @@ class Root extends Sprite {
     }
     public function displayLevel(){
         // creates level text field
-        levelText = new TextField(200, 120, "Level: ", "Impact", 24, 0x33CC33);
+        levelText = new TextField(200, 190, "Level: ", "Impact", 24, 0x33CC33);
         this.addChild(levelText);
         levelText.text += level;
     }
@@ -123,6 +126,17 @@ class Root extends Sprite {
     public function updateScore(){
         // removes old score value
         this.removeChild(scoreText);
+    }
+
+    public function displayMisses() {
+        // creates misses text field
+        missText = new TextField(200, 120, "Misses: ", "Impact", 24, 0x33CC33);
+        this.addChild(missText);
+        missText.text += misses;
+    }
+        public function updateMisses(){
+        // removes old miss value
+        this.removeChild(missText);
     }
 
 
@@ -157,6 +171,9 @@ class Root extends Sprite {
         // updates then displays users current score
         updateScore();
         displayScore();
+
+        updateMisses();
+        displayMisses();
 
         updateLevel();
         displayLevel();
@@ -241,6 +258,24 @@ class Root extends Sprite {
         }
         else{
             // stays in loop with no change in speed
+            assets.playSound("wrong");
+            misses++;
+            updateScore();
+            displayScore();
+            updateMisses();
+            displayMisses();
+            updateLevel();
+            displayLevel();
+            if(misses >= 5) {
+                gameOver();
+            }
         }
+    }
+
+    public function gameOver() {
+        Starling.juggler.remove(repeat);
+        Starling.current.stage.dispose();
+        var gameOverText = new TextField(625, 450, "Game Over", "Impact", 48, 0xC91010);
+        this.addChild(gameOverText);
     }
 }
