@@ -56,19 +56,19 @@ class Root extends Sprite {
         assets.enqueue("assets/orangeSquare.png");
         assets.enqueue("assets/purpleSquare.png");
         
-        assets.enqueue("assets/redCircle.png");
-        assets.enqueue("assets/blueCircle.png");
-        assets.enqueue("assets/greenCircle.png");
-        assets.enqueue("assets/yellowCircle.png");
-        assets.enqueue("assets/orangeCircle.png");
-        assets.enqueue("assets/purpleCircle.png");
+        assets.enqueue("assets/circle_red.png");
+        assets.enqueue("assets/circle_blue.png");
+        assets.enqueue("assets/circle_green.png");
+        assets.enqueue("assets/circle_yellow.png");
+        assets.enqueue("assets/circle_orange.png");
+        assets.enqueue("assets/circle_purple.png");
 
-        assets.enqueue("assets/redTriangle.png");
-        assets.enqueue("assets/blueTriangle.png");
-        assets.enqueue("assets/greenTriangle.png");
-        assets.enqueue("assets/yellowTriangle.png");
-        assets.enqueue("assets/orangeTriangle.png");
-        assets.enqueue("assets/purpleTriangle.png");
+        assets.enqueue("assets/red_triangle.png");
+        assets.enqueue("assets/blue_triangle.png");
+        assets.enqueue("assets/green_triangle.png");
+        assets.enqueue("assets/yellow_triangle.png");
+        assets.enqueue("assets/orange_triangle.png");
+        assets.enqueue("assets/purple_triangle.png");
 
         assets.loadQueue(function onProgress(ratio:Float) {
 
@@ -106,12 +106,6 @@ class Root extends Sprite {
 
     public function nextLevel(){
         speed = 2.0;
-        if(level < 5) {
-            level++;
-            this.removeChild(background);
-            background = new Image(Root.assets.getTexture("background" + level));
-            this.addChild(background);
-        }
         if(fastestSpeed > .25) {
             fastestSpeed = fastestSpeed * .75;
         }
@@ -120,6 +114,13 @@ class Root extends Sprite {
         } else if(maxRand < 18) {
             maxRand += 6;
         }
+        if(level < 5) {
+            level++;
+            this.removeChild(background);
+            background = new Image(Root.assets.getTexture("background" + level));
+            this.addChild(background);
+        }
+        run(speed, maxRand);
     }
     
     public function listenerInit(){
@@ -151,9 +152,10 @@ class Root extends Sprite {
         }
 
     	var color:Array<String> = ["redSquare", "blueSquare", "greenSquare", "yellowSquare", "orangeSquare", "purpleSquare",
-                                   "redCircle", "blueCircle", "greenCircle", "yellowCircle", "orangeCircle", "purpleCircle",
-                                   "redTriangle", "blueTriangle", "greenTriangle", "yellowTriangle", "orangeTriangle", "purpleTriangle"];
+                                   "circle_red", "circle_blue", "circle_green", "circle_yellow", "circle_orange", "circle_purple",
+                                   "red_triangle", "blue_triangle", "green_triangle", "yellow_triangle", "orange_triangle", "purple_triangle"];
 
+        removeChild(square1);
         square1 = new Image(Root.assets.getTexture(color[rand1]));
     	square1.x = 500;
     	square1.y = 100;
@@ -169,9 +171,10 @@ class Root extends Sprite {
         }
 
         var color:Array<String> = ["redSquare", "blueSquare", "greenSquare", "yellowSquare", "orangeSquare", "purpleSquare",
-                                   "redCircle", "blueCircle", "greenCircle", "yellowCircle", "orangeCircle", "purpleCircle",
-                                   "redTriangle", "blueTriangle", "greenTriangle", "yellowTriangle", "orangeTriangle", "purpleTriangle"];
+                                   "circle_red", "circle_blue", "circle_green", "circle_yellow", "circle_orange", "circle_purple",
+                                   "red_triangle", "blue_triangle", "green_triangle", "yellow_triangle", "orange_triangle", "purple_triangle"];
 
+        removeChild(square2);
         square2 = new Image(Root.assets.getTexture(color[rand2]));
         square2.x = 500;
         square2.y = 500;
@@ -198,6 +201,7 @@ class Root extends Sprite {
             points++;
             if(speed <= fastestSpeed){
                 // player at lowest speed already, if speed of 0 or -1 is reached, it will crash, so go to next level?
+                Starling.juggler.remove(repeat);
                 nextLevel();
             }
             else{
