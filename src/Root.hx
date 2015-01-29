@@ -11,6 +11,7 @@ import starling.text.TextField;
 import starling.animation.IAnimatable;
 import Std;
 import flash.events.Event;
+import flash.media.SoundChannel;
 
 
 
@@ -33,6 +34,8 @@ class Root extends Sprite {
     public var repeat:IAnimatable;
     public var background:Image;
     public var level:Int = 1;
+    public var bgmusic:SoundChannel; 
+    
 
     
     
@@ -46,6 +49,9 @@ class Root extends Sprite {
         //Removes loading screen and begins run()
 
         assets = new AssetManager();
+
+        assets.enqueue("assets/bgmusic.mp3");
+
         assets.enqueue("assets/background1.png");
         assets.enqueue("assets/background2.png");
         assets.enqueue("assets/background3.png");
@@ -72,6 +78,8 @@ class Root extends Sprite {
         assets.enqueue("assets/yellow_triangle.png");
         assets.enqueue("assets/orange_triangle.png");
         assets.enqueue("assets/purple_triangle.png");
+
+       
 
         assets.loadQueue(function onProgress(ratio:Float) {
 
@@ -136,6 +144,7 @@ class Root extends Sprite {
     }
     
     public function listenerInit(){
+        assets.playSound("bgmusic");
         // function adds listeners once so they are not looped
         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyPress);
         Starling.current.stage.addEventListener(TouchEvent.TOUCH, touchPress);
