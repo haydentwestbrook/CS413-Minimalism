@@ -14,6 +14,7 @@ import flash.events.Event;
 
 
 
+
 class Root extends Sprite {
 
 
@@ -28,9 +29,11 @@ class Root extends Sprite {
     public var maxRand = 3;
     public var points:Int = 0;
     public var scoreText:TextField;
+    public var levelText:TextField;
     public var repeat:IAnimatable;
     public var background:Image;
     public var level:Int = 1;
+
     
     
 
@@ -91,9 +94,18 @@ class Root extends Sprite {
 
         });
     }
+    public function displayLevel(){
+        // creates level text field
+        levelText = new TextField(200, 120, "Level: ", "Impact", 24, 0x33CC33);
+        this.addChild(levelText);
+        levelText.text += level;
+    }
+    public function updateLevel(){
+        this.removeChild(levelText);
+    }
     public function displayScore(){
         // creates score text field
-        scoreText = new TextField(200, 100, "Matches: ", "Impact", 24, 0xff0000);
+        scoreText = new TextField(200, 50, "Matches: ", "Impact", 24, 0x33CC33);
         this.addChild(scoreText);
         scoreText.text += points;
     }
@@ -134,6 +146,9 @@ class Root extends Sprite {
         // updates then displays users current score
         updateScore();
         displayScore();
+
+        updateLevel();
+        displayLevel();
 
 
         //Set up squares
