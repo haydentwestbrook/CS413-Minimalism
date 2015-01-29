@@ -117,7 +117,7 @@ class Root extends Sprite {
         }
         if(maxRand < 12) {
             maxRand += 3;
-        } else if(maxrand < 18) {
+        } else if(maxRand < 18) {
             maxRand += 6;
         }
     }
