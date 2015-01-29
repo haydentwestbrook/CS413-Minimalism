@@ -69,7 +69,7 @@ class Root extends Sprite {
         // creates score text field
         scoreText = new TextField(500, 500, "Score: ", "Arial", 24, 0xff0000);
         this.addChild(scoreText);
-        scoreText.text = "Score " + points;
+        scoreText.text += points;
     }
     
     public function updateScore(){
@@ -179,13 +179,14 @@ class Root extends Sprite {
             points++;
             if(speed <= .25){
                 // player at lowest speed already, if speed of 0 or -1 is reached, it will crash, so go to next level?
+                trace("speed at " + speed);
                 nextLevel();
             }
             else{
                 // match made and speed above 1, so runs loop again but with faster speed
                 Starling.juggler.remove(repeat);
                 speed = speed * .75;
-                run(speed, maxRand);  
+                run(speed, maxRand);
             }   
         }
         else{
