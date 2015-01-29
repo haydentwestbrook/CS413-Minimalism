@@ -93,7 +93,7 @@ class Root extends Sprite {
     }
     public function displayScore(){
         // creates score text field
-        scoreText = new TextField(500, 500, "Score: ", "Arial", 24, 0xff0000);
+        scoreText = new TextField(200, 100, "Matches: ", "Impact", 24, 0xff0000);
         this.addChild(scoreText);
         scoreText.text += points;
     }
@@ -157,8 +157,8 @@ class Root extends Sprite {
 
         removeChild(square1);
         square1 = new Image(Root.assets.getTexture(color[rand1]));
-    	square1.x = 500;
-    	square1.y = 100;
+    	square1.x = 235;
+    	square1.y = 0;
     	addChild(square1);
     }
 
@@ -176,8 +176,8 @@ class Root extends Sprite {
 
         removeChild(square2);
         square2 = new Image(Root.assets.getTexture(color[rand2]));
-        square2.x = 500;
-        square2.y = 500;
+        square2.x = 235;
+        square2.y = 330;
         addChild(square2);
     }
 
