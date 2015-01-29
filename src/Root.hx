@@ -24,10 +24,13 @@ class Root extends Sprite {
 	public var rand1:Int = -1;
 	public var rand2:Int = -1;
     public var speed:Float = 2.0;
-    public var maxRand = 6;
+    public var fastestSpeed:Float = .4;
+    public var maxRand = 3;
     public var points:Int = 0;
     public var scoreText:TextField;
     public var repeat:IAnimatable;
+    public var background:Image;
+    public var level:Int = 1;
     
     
 
@@ -40,16 +43,39 @@ class Root extends Sprite {
         //Removes loading screen and begins run()
 
         assets = new AssetManager();
+        assets.enqueue("assets/background1.png");
+        assets.enqueue("assets/background2.png");
+        assets.enqueue("assets/background3.png");
+        assets.enqueue("assets/background4.png");
+        assets.enqueue("assets/background5.png");
+
         assets.enqueue("assets/redSquare.png");
         assets.enqueue("assets/blueSquare.png");
         assets.enqueue("assets/greenSquare.png");
         assets.enqueue("assets/yellowSquare.png");
         assets.enqueue("assets/orangeSquare.png");
         assets.enqueue("assets/purpleSquare.png");
+        
+        assets.enqueue("assets/redCircle.png");
+        assets.enqueue("assets/blueCircle.png");
+        assets.enqueue("assets/greenCircle.png");
+        assets.enqueue("assets/yellowCircle.png");
+        assets.enqueue("assets/orangeCircle.png");
+        assets.enqueue("assets/purpleCircle.png");
+
+        assets.enqueue("assets/redTriangle.png");
+        assets.enqueue("assets/blueTriangle.png");
+        assets.enqueue("assets/greenTriangle.png");
+        assets.enqueue("assets/yellowTriangle.png");
+        assets.enqueue("assets/orangeTriangle.png");
+        assets.enqueue("assets/purpleTriangle.png");
+
         assets.loadQueue(function onProgress(ratio:Float) {
 
             if (ratio == 1) {
 
+                background = new Image(Root.assets.getTexture("background" + level));
+                this.addChild(background);
                 Starling.juggler.tween(startup.loadingBitmap, 2.0, {
                     transition: Transitions.EASE_OUT,
                         delay: 1.0,
@@ -79,8 +105,21 @@ class Root extends Sprite {
 
 
     public function nextLevel(){
-        trace("next level reached.");
         speed = 2.0;
+        if(level < 5) {
+            level++;
+            this.removeChild(background);
+            background = new Image(Root.assets.getTexture("background" + level));
+            this.addChild(background);
+        }
+        if(fastestSpeed > .25) {
+            fastestSpeed = fastestSpeed * .75;
+        }
+        if(maxRand < 12) {
+            maxRand += 3;
+        } else if(maxrand < 18) {
+            maxRand += 6;
+        }
     }
     
     public function listenerInit(){
@@ -97,7 +136,6 @@ class Root extends Sprite {
 
 
         //Set up squares
-        
     	makeSquare1(maxRand);
     	makeSquare2(maxRand);
         
@@ -112,45 +150,29 @@ class Root extends Sprite {
             rand1 = Std.random(maxRand);
         }
 
-    	if(rand1 == 0) {
-    		square1 = new Image(Root.assets.getTexture("redSquare"));
-    	} else if(rand1 == 1) {
-    		square1 = new Image(Root.assets.getTexture("blueSquare"));
-    	} else if(rand1 == 2) {
-    		square1 = new Image(Root.assets.getTexture("greenSquare"));
-    	}  else if(rand1 == 3) {
-            square1 = new Image(Root.assets.getTexture("yellowSquare"));
-        }  else if(rand1 == 4) {
-            square1 = new Image(Root.assets.getTexture("orangeSquare"));
-        }  else if(rand1 == 5) {
-            square1 = new Image(Root.assets.getTexture("purpleSquare"));
-        }
+    	var color:Array<String> = ["redSquare", "blueSquare", "greenSquare", "yellowSquare", "orangeSquare", "purpleSquare",
+                                   "redCircle", "blueCircle", "greenCircle", "yellowCircle", "orangeCircle", "purpleCircle",
+                                   "redTriangle", "blueTriangle", "greenTriangle", "yellowTriangle", "orangeTriangle", "purpleTriangle"];
+
+        square1 = new Image(Root.assets.getTexture(color[rand1]));
     	square1.x = 500;
     	square1.y = 100;
     	addChild(square1);
     }
 
     public function makeSquare2(maxRand:Int) {
-        //Randomly sets the color for square1
+        //Randomly sets the color for square2
         var oldRand = rand2;
         rand2 = Std.random(maxRand);
         while(oldRand == rand2) {
             rand2 = Std.random(maxRand);
         }
 
-        if(rand2 == 0) {
-            square2 = new Image(Root.assets.getTexture("redSquare"));
-        } else if(rand2 == 1) {
-            square2 = new Image(Root.assets.getTexture("blueSquare"));
-        } else if(rand2 == 2) {
-            square2 = new Image(Root.assets.getTexture("greenSquare"));
-        }  else if(rand2 == 3) {
-            square2 = new Image(Root.assets.getTexture("yellowSquare"));
-        }  else if(rand2 == 4) {
-            square2 = new Image(Root.assets.getTexture("orangeSquare"));
-        }  else if(rand2 == 5) {
-            square2 = new Image(Root.assets.getTexture("purpleSquare"));
-        }
+        var color:Array<String> = ["redSquare", "blueSquare", "greenSquare", "yellowSquare", "orangeSquare", "purpleSquare",
+                                   "redCircle", "blueCircle", "greenCircle", "yellowCircle", "orangeCircle", "purpleCircle",
+                                   "redTriangle", "blueTriangle", "greenTriangle", "yellowTriangle", "orangeTriangle", "purpleTriangle"];
+
+        square2 = new Image(Root.assets.getTexture(color[rand2]));
         square2.x = 500;
         square2.y = 500;
         addChild(square2);
@@ -171,15 +193,11 @@ class Root extends Sprite {
 	}
 
     public function checkWin() {
-        trace(rand1);
-        trace(rand2);
         if(rand1 == rand2){
 
-            trace("match");
             points++;
-            if(speed <= .25){
+            if(speed <= fastestSpeed){
                 // player at lowest speed already, if speed of 0 or -1 is reached, it will crash, so go to next level?
-                trace("speed at " + speed);
                 nextLevel();
             }
             else{
@@ -191,7 +209,6 @@ class Root extends Sprite {
         }
         else{
             // stays in loop with no change in speed
-            trace("no match");
         }
     }
 }
