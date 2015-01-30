@@ -23,6 +23,7 @@ class Root extends Sprite {
 	public static var assets:AssetManager;
 	public var square1:Image;
 	public var square2:Image;
+    public var retry:Image;
 	public var rand1:Int = -1;
 	public var rand2:Int = -1;
     public var speed:Float = 2.0;
@@ -38,6 +39,8 @@ class Root extends Sprite {
     public var level:Int = 1;
     public var bgmusic:SoundChannel; 
     public var beep:SoundChannel;
+    public var gameOverText = new TextField(625, 450, "Game Over", "Impact", 64, 0xC91010);
+
 
 
     
@@ -56,6 +59,8 @@ class Root extends Sprite {
         assets.enqueue("assets/bgmusic.mp3");
         assets.enqueue("assets/beep.mp3");
         assets.enqueue("assets/wrong.mp3");
+
+        assets.enqueue("assets/retry.png");
 
         assets.enqueue("assets/background1.png");
         assets.enqueue("assets/background2.png");
@@ -98,7 +103,7 @@ class Root extends Sprite {
                         alpha: 0,
                         onComplete: function() {
                         startup.removeChild(startup.loadingBitmap);
-                        
+                        assets.playSound("bgmusic",0,99);
                         listenerInit();
                			}
 
@@ -161,10 +166,11 @@ class Root extends Sprite {
     }
     
     public function listenerInit(){
-        assets.playSound("bgmusic",0,0);
+
         // function adds listeners once so they are not looped
         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyPress);
         Starling.current.stage.addEventListener(TouchEvent.TOUCH, touchPress);
+
 
         run(speed, maxRand);
     }
@@ -268,15 +274,55 @@ class Root extends Sprite {
             updateLevel();
             displayLevel();
             if(misses >= 5) {
+                removeChild(square1);
+                removeChild(square2);
+                removeChild(background);
+                removeChild(scoreText);
+                removeChild(levelText);
+                removeChild(missText);
+                Starling.juggler.remove(repeat);
+                Starling.current.stage.removeEventListeners();
+                
+                
+                //Starling.current.stage.removeChildren(0,-1);
                 gameOver();
             }
         }
     }
 
     public function gameOver() {
-        Starling.juggler.remove(repeat);
-        Starling.current.stage.dispose();
-        var gameOverText = new TextField(625, 450, "Game Over", "Impact", 48, 0xC91010);
-        this.addChild(gameOverText);
+
+        retry = new Image(Root.assets.getTexture("retry"));
+        Starling.current.stage.addEventListener(TouchEvent.TOUCH, retryPress);
+        retry.x = 200;
+        retry.y = 200;
+        addChild(retry);
+        addChild(gameOverText);
+
+
+    }
+    public function retryPress(event1:TouchEvent){
+        
+        var touch:Touch = event1.getTouch(this,TouchPhase.ENDED);
+        if(touch!=null){
+
+            removeChild(gameOverText);
+            removeChild(retry);
+            restartGame();
+        }
+    }
+
+    public function restartGame(){
+        Starling.current.stage.removeEventListeners();
+        level = 1;
+        speed = 2.0;
+        misses = 0;
+        maxRand = 3;
+        points = 0;
+        addChild(background);
+        
+        listenerInit();
     }
 }
+
+
