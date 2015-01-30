@@ -141,7 +141,8 @@ class Root extends Sprite {
 
 
     public function nextLevel(){
-        speed = 2.0;
+        speed = fastestSpeed + 1.8;
+        misses = 0;
         if(fastestSpeed > .25) {
             fastestSpeed = fastestSpeed * .75;
         }
