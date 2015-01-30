@@ -160,7 +160,7 @@ class Root extends Sprite {
     }
     
     public function listenerInit(){
-        assets.playSound("bgmusic");
+        assets.playSound("bgmusic",0,0);
         // function adds listeners once so they are not looped
         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyPress);
         Starling.current.stage.addEventListener(TouchEvent.TOUCH, touchPress);
